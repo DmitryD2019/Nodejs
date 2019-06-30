@@ -1,19 +1,32 @@
-const http = require('http'); // подключение модуля http
-const fs = require('fs'); // подключение модуля для работы с файлом
-const filename = "index.html";
-http.createServer((request, response) => {// вызов метода создания http сервера
-fs.readFile(filename, 'utf8', (err, data) => {
-if (err) {
-console.log('Could not find or open file for reading\n');
-response.statusCode = 404;
-response.end();
-} else {
-console.log(`The file ${filename} is read and sent to the client\n`);
-response.writeHead(200, {'Content-Type':'text/html'});
-response.end(data);
-}
-});
-console.log("Request accepted!");
-}).listen(8080, ()=>{
-console.log("HTTP server works in 8080 port!\n");
-});
+const http = require('http');
+const fs = require('fs');
+
+http.createServer((req, res)=>{
+    fs.readFile('header.html', 'utf-8', (err, data)=>{
+        if(err) {
+            res.statusCode = 404;
+            res.end();
+        } else {
+            res.writeHead(200, {
+               'Content-Type':'text/html' 
+            });
+            res.write(data);
+            fs.readFile('body.html', 'utf-8', (err, data)=>{
+                if(err) {
+                    res.statusCode = 404;
+                    res.end();
+                } else {
+                    res.end(data);
+                    fs.readFile('footer.html', 'utf-8', (err, data)=>{
+                        if(err) {
+                            res.statusCode = 404;
+                            res.end();
+                        } else {
+                            res.end(data);
+                        }
+                    });
+                }
+            });
+        }
+    });
+}).listen(80);
