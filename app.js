@@ -16,13 +16,17 @@ http.createServer((req, res)=>{
                     res.statusCode = 404;
                     res.end();
                 } else {
-                    res.end(data);
+                    res.writeHead(200, {
+                        'Content-Type':'text/html' 
+                     });
                     fs.readFile('footer.html', 'utf-8', (err, data)=>{
                         if(err) {
                             res.statusCode = 404;
                             res.end();
                         } else {
-                            res.write(data);
+                            res.writeHead(200, {
+                                'Content-Type':'text/html' 
+                             });
                         }
                     });
                 }
