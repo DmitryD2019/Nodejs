@@ -22,7 +22,7 @@ http.createServer((req, res)=>{
                             res.statusCode = 404;
                             res.end();
                         } else {
-                            res.end(data);
+                            res.write(data);
                         }
                     });
                 }
